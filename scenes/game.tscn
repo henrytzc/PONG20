@@ -1,0 +1,135 @@
+[gd_scene format=3 uid="uid://creapeljqlvwx"]
+
+[ext_resource type="Texture2D" uid="uid://crverkqyn43om" path="res://resources/wall_texture.tres" id="1_lbhrr"]
+[ext_resource type="Script" uid="uid://dp141arf8yno0" path="res://scenes/gameresthelper.gd" id="1_p57ef"]
+[ext_resource type="Script" uid="uid://dxs433uchywk8" path="res://scripts/playerpaddle.gd" id="1_yqjtg"]
+[ext_resource type="Script" uid="uid://wbi78kwkx6s6" path="res://scripts/goal.gd" id="2_iywne"]
+[ext_resource type="Script" uid="uid://d0lha6a0adf67" path="res://scripts/ball.gd" id="2_lnu2h"]
+[ext_resource type="Texture2D" uid="uid://bh5s1bglyddsm" path="res://assets/sprites/ball.png" id="5_iywne"]
+[ext_resource type="Script" uid="uid://yh17ngmoh4em" path="res://scripts/hud.gd" id="7_u5sy4"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_xkndl"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_u44n3"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sb48q"]
+height = 120.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_t88pq"]
+
+[node name="Node2D" type="Node2D" unique_id=1867134610 node_paths=PackedStringArray("ball")]
+script = ExtResource("1_p57ef")
+ball = NodePath("Ball")
+
+[node name="Arena" type="Node2D" parent="." unique_id=134618494]
+
+[node name="Wall_Top" type="StaticBody2D" parent="Arena" unique_id=493422084]
+position = Vector2(300, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Arena/Wall_Top" unique_id=1120778505]
+texture_filter = 1
+scale = Vector2(10000, 10)
+texture = ExtResource("1_lbhrr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Arena/Wall_Top" unique_id=1123357720]
+rotation = 3.1415927
+shape = SubResource("WorldBoundaryShape2D_xkndl")
+
+[node name="Wall_Bottom" type="StaticBody2D" parent="Arena" unique_id=1775372865]
+position = Vector2(0, 648)
+
+[node name="Sprite2D" type="Sprite2D" parent="Arena/Wall_Bottom" unique_id=1844394215]
+scale = Vector2(10000, 10)
+texture = ExtResource("1_lbhrr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Arena/Wall_Bottom" unique_id=442140482]
+shape = SubResource("WorldBoundaryShape2D_xkndl")
+
+[node name="Goal" type="Node2D" parent="Arena" unique_id=1629132287]
+
+[node name="Goal_Left" type="Area2D" parent="Arena/Goal" unique_id=912743623]
+script = ExtResource("2_iywne")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Arena/Goal/Goal_Left" unique_id=1049508820]
+rotation = 1.5707964
+shape = SubResource("WorldBoundaryShape2D_u44n3")
+
+[node name="Sprite2D" type="Sprite2D" parent="Arena/Goal/Goal_Left" unique_id=320643471]
+
+[node name="Goal_Right" type="Area2D" parent="Arena/Goal" unique_id=1499443486]
+script = ExtResource("2_iywne")
+side = "right"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Arena/Goal/Goal_Right" unique_id=1333179054]
+position = Vector2(1152, 0)
+rotation = 4.712389
+shape = SubResource("WorldBoundaryShape2D_u44n3")
+
+[node name="Sprite2D" type="Sprite2D" parent="Arena/Goal/Goal_Right" unique_id=1930579645]
+
+[node name="Paddle_Left" type="CharacterBody2D" parent="." unique_id=240546061 groups=["paddle"]]
+position = Vector2(71, 352)
+script = ExtResource("1_yqjtg")
+input_up = "player_1_up"
+input_down = "player_1_down"
+
+[node name="Sprite2D" type="Sprite2D" parent="Paddle_Left" unique_id=1709456396]
+scale = Vector2(0.2, 1)
+texture = ExtResource("5_iywne")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Paddle_Left" unique_id=1898187124]
+shape = SubResource("CapsuleShape2D_sb48q")
+
+[node name="Paddle_Right" type="CharacterBody2D" parent="." unique_id=1690835601 groups=["paddle"]]
+position = Vector2(1071, 212)
+script = ExtResource("1_yqjtg")
+input_up = "player_2_up"
+input_down = "player_2_down"
+
+[node name="Sprite2D" type="Sprite2D" parent="Paddle_Right" unique_id=2110637836]
+scale = Vector2(0.2, 1)
+texture = ExtResource("5_iywne")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Paddle_Right" unique_id=829329391]
+shape = SubResource("CapsuleShape2D_sb48q")
+
+[node name="Ball" type="CharacterBody2D" parent="." unique_id=307196093 groups=["ball"]]
+position = Vector2(558, 334)
+script = ExtResource("2_lnu2h")
+
+[node name="Sprite2D" type="Sprite2D" parent="Ball" unique_id=1029846081]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("5_iywne")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ball" unique_id=986745417]
+shape = SubResource("CircleShape2D_t88pq")
+
+[node name="HUD" type="Control" parent="." unique_id=958795233 node_paths=PackedStringArray("left_score_label", "right_score_label")]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("7_u5sy4")
+left_score_label = NodePath("HBoxContainer/LeftScore")
+right_score_label = NodePath("HBoxContainer/RightScore")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD" unique_id=1249501802]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+alignment = 1
+
+[node name="RightScore" type="Label" parent="HUD/HBoxContainer" unique_id=1198693937]
+layout_mode = 2
+theme_override_font_sizes/font_size = 100
+text = "0"
+
+[node name="LeftScore" type="Label" parent="HUD/HBoxContainer" unique_id=1038017588]
+layout_mode = 2
+theme_override_font_sizes/font_size = 100
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="body_entered" from="Arena/Goal/Goal_Left" to="Arena/Goal/Goal_Left" method="_on_body_entered"]
+[connection signal="body_entered" from="Arena/Goal/Goal_Right" to="Arena/Goal/Goal_Right" method="_on_body_entered"]

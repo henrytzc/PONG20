@@ -1,7 +1,7 @@
 extends CharacterBody2D
 ##  ball 控制器
 
-@export var speed := 400
+@export var speed := 500
 var direction := Vector2.ZERO
 var _spawn_global_position: Vector2
 
@@ -23,5 +23,7 @@ func _physics_process(delta):
 			direction = direction.bounce(collision.get_normal())
 			var offset: float = (global_position.y - collider.global_position.y) / 50.0
 			direction = Vector2(direction.x, offset).normalized()
+			if collider.has_method("on_ai_paddle_struck_ball_in_side"):
+				collider.on_ai_paddle_struck_ball_in_side()
 		else:
 			direction = direction.bounce(collision.get_normal())

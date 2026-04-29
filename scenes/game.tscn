@@ -8,12 +8,20 @@
 [ext_resource type="Texture2D" uid="uid://bh5s1bglyddsm" path="res://assets/sprites/ball.png" id="5_iywne"]
 [ext_resource type="Script" uid="uid://yh17ngmoh4em" path="res://scripts/hud.gd" id="7_u5sy4"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u5sy4"]
+size = Vector2(576, 658)
+
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_xkndl"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_u44n3"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_sb48q"]
-height = 120.0
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_u5sy4"]
+a = Vector2(0, -50)
+b = Vector2(0, 50)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_gee14"]
+a = Vector2(0, -50)
+b = Vector2(0, 50)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_t88pq"]
 
@@ -23,8 +31,25 @@ ball = NodePath("Ball")
 
 [node name="Arena" type="Node2D" parent="." unique_id=134618494]
 
+[node name="LeftArea" type="Area2D" parent="Arena" unique_id=375179821]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Arena/LeftArea" unique_id=1950712456]
+position = Vector2(288, 323)
+shape = SubResource("RectangleShape2D_u5sy4")
+
+[node name="RightArea" type="Area2D" parent="Arena" unique_id=2029392572]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Arena/RightArea" unique_id=616041021]
+position = Vector2(864, 323)
+shape = SubResource("RectangleShape2D_u5sy4")
+
 [node name="Wall_Top" type="StaticBody2D" parent="Arena" unique_id=493422084]
 position = Vector2(300, 0)
+collision_mask = 0
 
 [node name="Sprite2D" type="Sprite2D" parent="Arena/Wall_Top" unique_id=1120778505]
 texture_filter = 1
@@ -37,6 +62,7 @@ shape = SubResource("WorldBoundaryShape2D_xkndl")
 
 [node name="Wall_Bottom" type="StaticBody2D" parent="Arena" unique_id=1775372865]
 position = Vector2(0, 648)
+collision_mask = 0
 
 [node name="Sprite2D" type="Sprite2D" parent="Arena/Wall_Bottom" unique_id=1844394215]
 scale = Vector2(10000, 10)
@@ -48,6 +74,8 @@ shape = SubResource("WorldBoundaryShape2D_xkndl")
 [node name="Goal" type="Node2D" parent="Arena" unique_id=1629132287]
 
 [node name="Goal_Left" type="Area2D" parent="Arena/Goal" unique_id=912743623]
+collision_layer = 0
+collision_mask = 4
 script = ExtResource("2_iywne")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Arena/Goal/Goal_Left" unique_id=1049508820]
@@ -57,6 +85,8 @@ shape = SubResource("WorldBoundaryShape2D_u44n3")
 [node name="Sprite2D" type="Sprite2D" parent="Arena/Goal/Goal_Left" unique_id=320643471]
 
 [node name="Goal_Right" type="Area2D" parent="Arena/Goal" unique_id=1499443486]
+collision_layer = 0
+collision_mask = 4
 script = ExtResource("2_iywne")
 side = "right"
 
@@ -67,42 +97,53 @@ shape = SubResource("WorldBoundaryShape2D_u44n3")
 
 [node name="Sprite2D" type="Sprite2D" parent="Arena/Goal/Goal_Right" unique_id=1930579645]
 
-[node name="Paddle_Left" type="CharacterBody2D" parent="." unique_id=240546061 groups=["paddle"]]
-position = Vector2(71, 352)
+[node name="Paddle_Left" type="CharacterBody2D" parent="." unique_id=240546061 node_paths=PackedStringArray("ball", "ai_side_area") groups=["paddle"]]
+physics_interpolation_mode = 1
+position = Vector2(30, 327)
+collision_layer = 2
 script = ExtResource("1_yqjtg")
 input_up = "player_1_up"
 input_down = "player_1_down"
+ball = NodePath("../Ball")
+ai_side_area = NodePath("../Arena/LeftArea")
 
 [node name="Sprite2D" type="Sprite2D" parent="Paddle_Left" unique_id=1709456396]
 scale = Vector2(0.2, 1)
 texture = ExtResource("5_iywne")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Paddle_Left" unique_id=1898187124]
-shape = SubResource("CapsuleShape2D_sb48q")
+shape = SubResource("SegmentShape2D_u5sy4")
 
-[node name="Paddle_Right" type="CharacterBody2D" parent="." unique_id=1690835601 groups=["paddle"]]
-position = Vector2(1071, 212)
+[node name="Paddle_Right" type="CharacterBody2D" parent="." unique_id=1690835601 node_paths=PackedStringArray("ball", "ai_side_area") groups=["paddle"]]
+physics_interpolation_mode = 1
+position = Vector2(1122, 327)
+collision_layer = 2
 script = ExtResource("1_yqjtg")
 input_up = "player_2_up"
 input_down = "player_2_down"
+ball = NodePath("../Ball")
+ai_side_area = NodePath("../Arena/RightArea")
 
 [node name="Sprite2D" type="Sprite2D" parent="Paddle_Right" unique_id=2110637836]
 scale = Vector2(0.2, 1)
 texture = ExtResource("5_iywne")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Paddle_Right" unique_id=829329391]
-shape = SubResource("CapsuleShape2D_sb48q")
+shape = SubResource("SegmentShape2D_gee14")
 
 [node name="Ball" type="CharacterBody2D" parent="." unique_id=307196093 groups=["ball"]]
-position = Vector2(558, 334)
+physics_interpolation_mode = 1
+position = Vector2(576, 327)
+collision_layer = 4
+collision_mask = 3
 script = ExtResource("2_lnu2h")
-
-[node name="Sprite2D" type="Sprite2D" parent="Ball" unique_id=1029846081]
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("5_iywne")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ball" unique_id=986745417]
 shape = SubResource("CircleShape2D_t88pq")
+
+[node name="Sprite2D" type="Sprite2D" parent="Ball/CollisionShape2D" unique_id=1029846081]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("5_iywne")
 
 [node name="HUD" type="Control" parent="." unique_id=958795233 node_paths=PackedStringArray("left_score_label", "right_score_label")]
 layout_mode = 3
@@ -115,8 +156,10 @@ right_score_label = NodePath("HBoxContainer/RightScore")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HUD" unique_id=1249501802]
 layout_mode = 0
-offset_right = 1152.0
+offset_left = 30.0
+offset_right = 1122.0
 offset_bottom = 648.0
+theme_override_constants/separation = 100
 alignment = 1
 
 [node name="RightScore" type="Label" parent="HUD/HBoxContainer" unique_id=1198693937]
